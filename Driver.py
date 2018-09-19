@@ -7,14 +7,19 @@ class Driver():
 
     def run(self):
 
-        p1server = ('localhost', 10000)
-        p2server = ('localhost', 10005)
+        #p1server = ('127.0.0.1', 8080)
+        #p2server = ('localhost', 10005)
 
-        c1 = Client(p1server, p2server)
-        c2 = Client(p2server, p1server)
+            
+        
 
-        s1 = Server(p1server)
-        s2 = Server(p2server)
+        print('Creating player 1\'s server')
+        s1 = Server()
+        #s2 = Server(p2server)
+
+        print('Creating player 1\'s client')    
+        c1 = Client()
+        #c2 = Client(p2server, p1server)
 
 m = Driver()
 m.run()
