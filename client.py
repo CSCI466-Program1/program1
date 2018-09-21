@@ -1,5 +1,4 @@
 import socket
-import re
 
 class Client:
 
@@ -11,19 +10,21 @@ class Client:
         print("Received data: " + response)
         if (response == 'hit=1'):
             print('Hit')
-        if (response == 'hit=0'):
+        elif (response == 'hit=0'):
             print('Miss')
             replace = 'O'
-        if (response == 'sink=C'):
-            print('You sunk my Carrier')
-        if (response == 'sink=B'):
-            print('You sunk my Battleship')
-        if (response == 'sink=R'):
-            print('You sunk my Cruiser')
-        if (response == 'sink=S'):
-            print('You sunk my Submarine')
-        if (response == 'sink=D'):
-            print('You sunk my Destroyer')
+        elif (response == 'sink=C'):
+            print('You sunk their Carrier')
+        elif (response == 'sink=B'):
+            print('You sunk their Battleship')
+        elif (response == 'sink=R'):
+            print('You sunk their Cruiser')
+        elif (response == 'sink=S'):
+            print('You sunk their Submarine')
+        elif (response == 'sink=D'):
+            print('You sunk their Destroyer')
+        else:
+            print('Invalid response')
 
         opp_board_r = open('opponent_board.txt', 'r')
         lines = opp_board_r.readlines()
