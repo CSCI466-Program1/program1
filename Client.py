@@ -2,18 +2,27 @@ import socket
 
 class Client:
 
-    my_server = ('127.0.0.1', 8080)
+    def setup(self):
+        self.my_server = ('127.0.0.1', 8000)        
+				
     
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)        
+    def speak(self, x, y):
+        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+    
+        self.s.connect((self.my_server))
+        
+        message = ('fire x=%s&y=%s' % (x, y))
+		
+        self.s.send(message.encode('utf-8'))
 
-    #s.connect(('127.0.0.1', 8080))
-    s.connect((my_server))
+        data = self.s.recv(64)
 
-    s.send('Pew Pew'.encode('utf-8'))
+        print("Received data: " + data.decode('utf-8'))
 
-    data = s.recv(64)
+        self.s.close()
 
-    print("Received data: " + data.decode('utf-8'))
 
-    s.close()
-  
+C = Client()
+C.setup()
+C.speak(0, 1)
+C.speak(1, 1)
