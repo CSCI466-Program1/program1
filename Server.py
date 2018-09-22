@@ -126,21 +126,25 @@ class Server(threading.Thread):
     def run(self):
         print("Beginning to listen...")
         self.s.bind(self.my_address)
+        
         self.s.listen(1)
         self.conn, self.address = self.s.accept()
+        
+        for i in range(2):
+        
 
-        shot = self.conn.recv(64)
-        print("Received data of " + shot.decode('utf-8'))
-        
-        coordinates = self.parse_shot(shot)
-            #Parse string into integer array {x, y}
-        
-        response = self.check_for_hit(coordinates)
-            #Check own_board.txt for hit or miss
-            #Create string response of hit=0, hit=1, or sink
-        
-        self.respond(response)
-            #Send message to client
+            shot = self.conn.recv(64)
+            print("Received data of " + shot.decode('utf-8'))
+            
+            coordinates = self.parse_shot(shot)
+                #Parse string into integer array {x, y}
+            
+            response = self.check_for_hit(coordinates)
+                #Check own_board.txt for hit or miss
+                #Create string response of hit=0, hit=1, or sink
+            
+            self.respond(response)
+                #Send message to client
 
         self.conn.close()
         

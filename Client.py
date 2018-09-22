@@ -7,7 +7,9 @@ class Client(threading.Thread):
 
     def __init__(self):
         threading.Thread.__init__(self)
-        self.my_server = ('127.0.0.1', 8000)        
+        self.my_server = ('127.0.0.1', 8000)
+
+        self.shots = [0, 1, 1, 1]
            
     def update_opponent(self, data, x, y):
 
@@ -60,17 +62,25 @@ class Client(threading.Thread):
                 break
             except Exception as e:
                 print 'Waiting for Server: ', e
-                
-        x = 0
-        y = 1
-         
-        print('Firing at x=%s & y=%s' % (x, y))
-        message = ('fire x=%s&y=%s' % (x, y))
-		
-        self.s.send(message.encode('utf-8'))
+        
+        
+        
+        count = 0
+        for i in range(2):
+            x = self.shots[count]
+            count += 1
+            y = self.shots[count]
+            count += 1
+        
+            print('Firing at x=%s & y=%s' % (x, y))
+            message = ('fire x=%s&y=%s' % (x, y))
+            
+            self.s.send(message.encode('utf-8'))
 
-        data = self.s.recv(64)
-                
-        self.update_opponent(data, x, y)
+            data = self.s.recv(64)
+                    
+            self.update_opponent(data, x, y)
+            
+            time.sleep(1)
 
         self.s.close()
