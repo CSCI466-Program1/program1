@@ -1,21 +1,27 @@
+import threading
 import socket
-import sys
 import re
 import os
 
-class Server:
+class Server(threading.Thread):
 
     def __init__(self):
+        threading.Thread.__init__(self)
+        
+        self.my_address = ('127.0.0.1', 8000)
+        
+        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
         self.carrier = 0 #5 lives
         self.battleship = 0 #4 lives
         self.crusier = 0 #3 lives
         self.submarine = 0 #3 lives
-        self.destroyer = 0 #2 lives
+        self.destroyer = 0 #2 lives       
         
 
     def check_for_hit(self, coordinates):        
-        filepath = os.path.join('c:/Users/ian/Documents/Courses/CSCI 466/Program1', 'own_board.txt')
-        own_board = open(filepath, 'r')
+        filepath = os.path.join('c:/Users/ian/Documents/Courses/CSCI 466/Program1', 'own_board.txt')        
+        own_board = open(filepath, 'r')        
         
         lines = own_board.readlines()        
         own_board.close()
@@ -117,8 +123,9 @@ class Server:
         return coordinates
 
     
-    def listening(self):
+    def run(self):
         print("Beginning to listen...")
+        self.s.bind(self.my_address)
         self.s.listen(1)
         self.conn, self.address = self.s.accept()
 
@@ -136,15 +143,4 @@ class Server:
             #Send message to client
 
         self.conn.close()
-
-    def setup(self):
-        my_address = ('127.0.0.1', 8000)
         
-        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    
-        self.s.bind(my_address)    
-
-S = Server()
-S.setup()
-S.listening()
-S.listening()
