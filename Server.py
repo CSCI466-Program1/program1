@@ -5,12 +5,14 @@ import os
 
 class Server(threading.Thread):
 
-    def __init__(self):
+    def __init__(self, my_ip, opp_ip):
         threading.Thread.__init__(self)
-        
-        self.my_address = ('127.0.0.1', 8000)
+                
+        self.my_ip = my_ip
+        self.opp_ip = opp_ip
         
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.s.bind(self.my_ip)
     
         self.carrier = 0 #5 lives
         self.battleship = 0 #4 lives
@@ -56,9 +58,9 @@ class Server(threading.Thread):
             response = self.check_sunk('S')
             
         elif coord == 'D':  
-            print('Destroyer hit!')
+            print('S: Destroyer hit!')
             self.destroyer += 1
-            print('Destroyer adding taking damage, at %s damage' % self.destroyer)
+            print('S: Destroyer adding taking damage, at %s damage' % self.destroyer)
             response = self.check_sunk('D')
         
         else:
@@ -95,10 +97,10 @@ class Server(threading.Thread):
                               
         elif ship == 'D':
             if self.destroyer < 2:
-                print('Destroyer has %s damage' % self.destroyer)
+                print('S: Destroyer has %s damage' % self.destroyer)
                 response = 'hit=1'
             elif self.destroyer >= 2:
-                print('Destroyer has been sunk, %s damage' % self.destroyer)
+                print('S: Destroyer has been sunk, %s damage' % self.destroyer)
                 response = 'sunk=D'          
         
         else:
@@ -112,29 +114,27 @@ class Server(threading.Thread):
     
 
     def respond(self, message):
-        print('Returning response ' + str(message))        
+        print('S: Returning response ' + str(message))        
         self.conn.send(str(message).encode('utf-8'))
         
 
     def parse_shot(self, shot):
         coordinates = re.findall(r'\d+', shot)
         coordinates = map(int, coordinates)
-        print(coordinates)
+        print('S: ' + str(coordinates))
         return coordinates
 
     
     def run(self):
-        print("Beginning to listen...")
-        self.s.bind(self.my_address)
-        
-        self.s.listen(1)
-        self.conn, self.address = self.s.accept()
-        
-        for i in range(2):
-        
+                
+        while True:
+            print("S: Beginning to listen...")
+                          
+            self.s.listen(1)
+            self.conn, self.address = self.s.accept()
 
             shot = self.conn.recv(64)
-            print("Received data of " + shot.decode('utf-8'))
+            print("S: Received data of " + shot.decode('utf-8'))
             
             coordinates = self.parse_shot(shot)
                 #Parse string into integer array {x, y}
@@ -146,5 +146,5 @@ class Server(threading.Thread):
             self.respond(response)
                 #Send message to client
 
-        self.conn.close()
+            self.conn.close()
         
