@@ -1,24 +1,30 @@
-import time
-import socket
+import thread
 from Client import Client
 from Server import Server
 
 
 class Driver:
 
-    def run(self):
-
-        #p1server = ('127.0.0.1', 8080)
-        #p2server = ('localhost', 10005)
+    if __name__ == '__main__':
         
-        print('Creating player 2\'s server')
-        s2 = Server(('127.0.0.1', 9000))        
-                
-        print('Creating player 1\'s client')    
-        c1 = Client(('127.0.0.1', 8000), ('127.0.0.1', 9000))
+        s1_ip = ('127.0.0.1', 8000)
+        s2_ip = ('127.0.0.2', 9000)
+        
+        #c1_ip = ('127.0.0.1', 8005)
+        #c2_ip = ('127.0.0.1', 9005)
+    
+        thr_s1 = Server(s1_ip, s2_ip)
+        thr_s2 = Server(s2_ip, s1_ip)
+        thr_c1 = Client(False, s1_ip, s2_ip)
+        thr_c2 = Client(True, s2_ip, s1_ip)        
+        
+        thr_s1.start()
+        thr_s2.start()
+        thr_c1.start()
+        thr_c2.start()
 
-        s2.listening()
-        c1.shoot()        
+        thr_s1.join()
+        thr_s2.join()
+        thr_c1.join()
+        thr_c2.join()
 
-m = Driver()
-m.run()

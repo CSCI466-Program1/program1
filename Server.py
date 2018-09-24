@@ -1,58 +1,201 @@
+import threading
 import socket
-import sys
 import re
+import os
 
-class Server:
+class Server(threading.Thread):
 
-    def check_for_hit(self, coordinates):
-        print('Checking for hit')
-        own_board = open('own_board.txt', 'r')
-        lines = own_board.readlines()
+    def __init__(self, my_ip, opp_ip):
+        threading.Thread.__init__(self)
+                
+        self.my_ip = my_ip
+        self.opp_ip = opp_ip
+        
+        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.s.bind(self.my_ip)
+    
+        self.carrier = 0 #5 lives
+        self.battleship = 0 #4 lives
+        self.cruiser = 0 #3 lives
+        self.submarine = 0 #3 lives
+        self.destroyer = 0 #2 lives       
+        
+
+    def check_for_hit(self, coordinates):        
+        filepath = os.path.join('c:/Users/ian/Documents/Courses/CSCI 466/Program1', 'own_board.txt')        
+        own_board = open(filepath, 'r')        
+        
+        lines = own_board.readlines()        
+        own_board.close()
+        
         x = coordinates[0]
         y = coordinates[1]
 
-        response = 'hit=0'
-    
-        if (lines[x][y] != '_'):
-            print('ARG, WE BE HIT CAP\'N')
-            response = 'hit=1'
-        '''
-        for j in lines:
-            for i in j:
-                print(i),
-        '''
+        response = self.check_coords(lines[x][y])
+
         return response
+    
+
+    def check_coords(self, coord):
+
+        if coord == '_':
+            response = 'hit=0'            
+            
+        elif coord == 'C':            
+            self.carrier += 1            
+            response = self.check_sunk('C')
+            
+        elif coord == 'B':
+            self.battleship += 1
+            response = self.check_sunk('B') 
+            
+        elif coord == 'R':            
+            self.cruiser += 1
+            response = self.check_sunk('R')
+            
+        elif coord == 'S':            
+            self.submarine += 1
+            response = self.check_sunk('S')
+            
+        elif coord == 'D':  
+            print('S: Destroyer hit!')
+            self.destroyer += 1
+            print('S: Destroyer adding taking damage, at %s damage' % self.destroyer)
+            response = self.check_sunk('D')
+        
+        else:
+            response = 'hit=0'
+        
+        return response
+        
+        
+    def check_sunk(self, ship):
+       
+        if ship == 'C':
+            if self.carrier < 5:
+                response = 'hit=1'
+            elif self.carrier >= 5:
+                response = 'sunk=C'            
+            
+        elif ship == 'B':
+            if self.battleship < 4:
+                response = 'hit=1'
+            elif self.battleship >= 4:
+                response = 'sunk=B'            
+        
+        elif ship == 'R':
+            if self.cruiser < 3:
+                response = 'hit=1'
+            elif self.cruiser >= 3:
+                response = 'sunk=R'                    
+            
+        elif ship == 'S':
+            if self.submarine < 3:
+                response = 'hit=1'
+            elif self.submarine >= 3:
+                response = 'sunk=S'            
+                              
+        elif ship == 'D':
+            if self.destroyer < 2:
+                print('S: Destroyer has %s damage' % self.destroyer)
+                response = 'hit=1'
+            elif self.destroyer >= 2:
+                print('S: Destroyer has been sunk, %s damage' % self.destroyer)
+                response = 'sunk=D'          
+        
+        else:
+            response = 'hit=0'
+        
+        return response
+        
+
+    def update_board(self):
+        pass
+    
+
+    def respond(self, message):
+        print('S: Returning response ' + str(message))        
+        self.connection.send(str(message).encode('utf-8'))
+        
 
     def parse_shot(self, shot):
         coordinates = re.findall(r'\d+', shot)
         coordinates = map(int, coordinates)
-        print(coordinates)
+        print('S: ' + str(coordinates))
         return coordinates
-    
-    def listening(self):
-        print("Beginning to listen...")
+        
+    def hear_shot(self):
+        print('S: Listening for shot from opponent')
         self.s.listen(1)
-        conn, address = self.s.accept()
-
-        shot = conn.recv(64)
-        print("Received data of " + shot.decode('utf-8'))
+        self.connection, opp_address = self.s.accept()
         
-        coordinates = self.parse_shot(shot)
+        shot = self.connection.recv(64)
+        print('S: Received data of ' + shot.decode('utf-8'))
+                
+        return shot
         
+    def answer_my_client(self):
+        while True
+            self.s.listen(1)
+            try:
+                self.connection, my_client_address = self.s.accept()
+                
+                response = 'True'
+            
+                self.respond(response)
+            except Exception as e:
+        
+        self.connection.close()
+        
+        
+    def respond_shot(self, coordinates):
         response = self.check_for_hit(coordinates)
-
-        print('Returning response')
-        conn.send(response.encode('utf-8'))
-
-        conn.close()
-
-    def setup(self):
-        my_address = ('127.0.0.1', 8000)
         
-        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    
-        self.s.bind(my_address)    
-
-S = Server()
-S.setup()
-S.listening()
+        self.respond(response)
+        
+        self.connection.close()
+                
+        
+    def run(self):
+                
+        while True:
+            
+            shot = self.hear_shot()
+            
+            coordinates = self.parse_shot(shot)            
+                
+            self.respond_shot(coordinates)
+            
+            self.answer_my_client()
+            
+            #respond to my client poll of 'is it my turn' with 'yes'            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
