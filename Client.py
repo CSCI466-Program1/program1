@@ -28,18 +28,22 @@ class Client(threading.Thread):
         elif (response == 'hit=0'):
             print('C: Miss')
             replace = 'O'
-        elif (response == 'sunk=C'):
+        elif (response == 'hit=1/&sunk=C'):
             print('C: You sunk their Carrier')
-        elif (response == 'sunk=B'):
+        elif (response == 'hit=1/&sunk=B'):
             print('C: You sunk their Battleship')
-        elif (response == 'sunk=R'):
+        elif (response == 'hit=1/&sunk=R'):
             print('C: You sunk their Cruiser')
-        elif (response == 'sunk=S'):
+        elif (response == 'hit=1/&sunk=S'):
             print('C: You sunk their Submarine')
-        elif (response == 'sunk=D'):
+        elif (response == 'hit=1/&sunk=D'):
             print('C: You sunk their Destroyer')
+        elif (response == 'win=1'):
+            print('C: You have won')
+            self.s.close()
         else:
             print('C: Invalid response')
+            return
 
         filepath = os.path.join('c:/Users/ian/Documents/Courses/CSCI 466/Program1', 'opponent_board.txt')
         opp_board_r = open(filepath, 'r')

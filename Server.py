@@ -18,7 +18,9 @@ class Server(threading.Thread):
         self.battleship = 0 #4 lives
         self.cruiser = 0 #3 lives
         self.submarine = 0 #3 lives
-        self.destroyer = 0 #2 lives       
+        self.destroyer = 0 #2 lives 
+
+        self.ships_alive = 5
         
 
     def check_for_hit(self, coordinates):        
@@ -29,9 +31,12 @@ class Server(threading.Thread):
         own_board.close()
         
         x = coordinates[0]
-        y = coordinates[1]
-
-        response = self.check_coords(lines[x][y])
+        y = coordinates[1]      
+        
+        if x > 9 or x < 0 or y > 9 or y < 0:
+            response = 'HTTP Not Found'
+        else:
+            response = self.check_coords(lines[x][y])
 
         return response
     
@@ -75,25 +80,25 @@ class Server(threading.Thread):
             if self.carrier < 5:
                 response = 'hit=1'
             elif self.carrier >= 5:
-                response = 'sunk=C'            
+                response = self.check_win('hit=1\&sunk=C')
             
         elif ship == 'B':
             if self.battleship < 4:
                 response = 'hit=1'
             elif self.battleship >= 4:
-                response = 'sunk=B'            
+                response = self.check_win('hit=1\&sunk=B')
         
         elif ship == 'R':
             if self.cruiser < 3:
                 response = 'hit=1'
             elif self.cruiser >= 3:
-                response = 'sunk=R'                    
+                response = self.check_win('hit=1\&sunk=R')
             
         elif ship == 'S':
             if self.submarine < 3:
                 response = 'hit=1'
             elif self.submarine >= 3:
-                response = 'sunk=S'            
+                response = self.check_win('hit=1\&sunk=S')
                               
         elif ship == 'D':
             if self.destroyer < 2:
@@ -101,12 +106,20 @@ class Server(threading.Thread):
                 response = 'hit=1'
             elif self.destroyer >= 2:
                 print('S: Destroyer has been sunk, %s damage' % self.destroyer)
-                response = 'sunk=D'          
+                response = self.check_win('hit=1\&sunk=D')
         
         else:
             response = 'hit=0'
         
         return response
+        
+    def check_win(self, response):
+        self.ships_alive -= 1
+        if self.ships_alive == 0:
+            print('S: All ships have been sunk')
+            return('win=1')
+        else:
+            return response
         
 
     def update_board(self):
@@ -135,7 +148,7 @@ class Server(threading.Thread):
         return shot
         
     def answer_my_client(self):
-        while True
+        while True:
             self.s.listen(1)
             try:
                 self.connection, my_client_address = self.s.accept()
@@ -144,7 +157,7 @@ class Server(threading.Thread):
             
                 self.respond(response)
             except Exception as e:
-        
+                pass
         self.connection.close()
         
         
