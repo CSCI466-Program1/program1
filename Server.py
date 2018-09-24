@@ -29,6 +29,10 @@ class Server(threading.Thread):
         
         lines = own_board.readlines()        
         own_board.close()
+
+        print('Own Board:')
+        for i in range (10):
+            print(lines[i])
         
         x = coordinates[0]
         y = coordinates[1]      
@@ -181,34 +185,4 @@ class Server(threading.Thread):
             
             self.answer_my_client()
             
-            #respond to my client poll of 'is it my turn' with 'yes'            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+            #respond to my client poll of 'is it my turn' with 'yes'  
