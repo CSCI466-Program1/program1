@@ -1,0 +1,54 @@
+Client1 my server:('127.0.0.1', 8000)
+Client1 opp server:('127.0.0.2', 9000)
+Client2 my server:('127.0.0.2', 9000)
+Client2 opp server:('127.0.0.1', 8000)
+Server1 Listening for connection
+Server1 Waiting for packet
+Client2Trying to connect to opp server ('127.0.0.1', 8000)
+Server1 recieved hi opp serverfrom opp client
+Client2 received hi opponentfrom opp server
+Server1 sent message to opp client
+Server1 Closing connection
+
+Client2 accepted connection from my server
+Server2 connected to own client
+
+Server2 sent your turn message to own client
+Client2 received your turn=Truefrom my server
+!!!!Server1 connected to own clientClient1 accepted connection from my server
+
+Client1 received your turn=Truefrom my serverServer1 sent your turn message to own client
+
+Client2Trying to connect to opp server ('127.0.0.1', 8000)
+Client1Trying to connect to opp server ('127.0.0.2', 9000)
+Client2Waiting for Server:  [Errno 10061] No connection could be made because the target machine actively refused it
+Exception in thread Thread-2:
+Traceback (most recent call last):
+  File "C:\Python27\lib\threading.py", line 801, in __bootstrap_inner
+    self.run()
+  File "C:\Users\ian\Documents\Courses\CSCI 466\Program1\Server2.py", line 69, in run
+    self.talk_own_client()
+  File "C:\Users\ian\Documents\Courses\CSCI 466\Program1\Server2.py", line 33, in talk_own_client
+    self.s.connect(self.my_client)
+  File "C:\Python27\lib\socket.py", line 228, in meth
+    return getattr(self._sock,name)(*args)
+error: [Errno 10061] No connection could be made because the target machine actively refused it
+
+Client1Waiting for Server:  E[Errno 10061] No connection could be made because the target machine actively refused itxception in thread Thread-1:
+Traceback (most recent call last):
+  File "C:\Python27\lib\threading.py", line 801, in __bootstrap_inner
+    self.run()
+  File "C:\Users\ian\Documents\Courses\CSCI 466\Program1\Server2.py", line 69, in run
+    self.talk_own_client()
+  File "C:\Users\ian\Documents\Courses\CSCI 466\Program1\Server2.py", line 33, in talk_own_client
+    self.s.connect(self.my_client)
+  File "C:\Python27\lib\socket.py", line 228, in meth
+    return getattr(self._sock,name)(*args)
+error: [Errno 10061] No connection could be made because the target machine actively refused it
+
+
+Client2Trying to connect to opp server ('127.0.0.1', 8000)
+Client1Trying to connect to opp server ('127.0.0.2', 9000)
+Client2Waiting for Server:  [Errno 10061] No connection could be made because the target machine actively refused it
+Client1Waiting for Server:  [Errno 10061] No connection could be made because the target machine actively refused it
+Client2Trying to connect to opp server ('127.0.0.1', 8000)

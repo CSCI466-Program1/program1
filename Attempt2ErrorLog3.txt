@@ -1,0 +1,50 @@
+Client1 my server:('127.0.0.1', 8000)
+Client1 opp server:('127.0.0.2', 9000)
+Client2 my server:('127.0.0.2', 9000)
+Client2 opp server:('127.0.0.1', 8000)
+Server1 Listening for connection
+Server1 Waiting for packet
+Client2 Trying to connect to opp server ('127.0.0.1', 8000)
+Server1 recieved hi opp serverfrom opp client
+Client2 received hi opponentfrom opp server
+Server1 sent message to opp client
+Server1 Closing connection
+
+Client2 accepted connection from my server
+Client2 received from my server
+Server2 Listening for connection
+Client1 accepted connection from my server
+Client1 received from my server
+
+Exception in thread Thread-2:
+Traceback (most recent call last):
+  File "C:\Python27\lib\threading.py", line 801, in __bootstrap_inner
+    self.run()
+  File "C:\Users\ian\Documents\Courses\CSCI 466\Program1\Server2.py", line 64, in run
+    self.s.listen(1)
+  File "C:\Python27\lib\socket.py", line 228, in meth
+    return getattr(self._sock,name)(*args)
+  File "C:\Python27\lib\socket.py", line 174, in _dummy
+    raise error(EBADF, 'Bad file descriptor')
+error: [Errno 9] Bad file descriptor
+
+Client2Trying to connect to opp server ('127.0.0.1', 8000)
+Client1Trying to connect to opp server ('127.0.0.2', 9000)Server1 Listening for connection
+
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "C:\Python27\lib\threading.py", line 801, in __bootstrap_inner
+    self.run()
+  File "C:\Users\ian\Documents\Courses\CSCI 466\Program1\Server2.py", line 64, in run
+    self.s.listen(1)
+  File "C:\Python27\lib\socket.py", line 228, in meth
+    return getattr(self._sock,name)(*args)
+  File "C:\Python27\lib\socket.py", line 174, in _dummy
+    raise error(EBADF, 'Bad file descriptor')
+error: [Errno 9] Bad file descriptor
+
+Client2Waiting for Server:  [Errno 10061] No connection could be made because the target machine actively refused it
+Client1Waiting for Server:  [Errno 10061] No connection could be made because the target machine actively refused it
+Client2Trying to connect to opp server ('127.0.0.1', 8000)
+Client1Trying to connect to opp server ('127.0.0.2', 9000)
+Client2Waiting for Server:  [Errno 10061] No connection could be made because the target machine actively refused it
