@@ -54,10 +54,6 @@ class Client(threading.Thread):
         lines[x] = ''.join(target_row)
         opp_board_r.close()
 
-        print('Opponent Board:')
-        for i in range (10):
-            print(lines[i])
-
         filepath = os.path.join('c:/Users/ian/Documents/Courses/CSCI 466/Program1', 'opponent_board.txt')
         opp_board_w = open(filepath, 'w')
         opp_board_w.write(''.join(lines))
@@ -145,3 +141,23 @@ class Client(threading.Thread):
                     self.my_turn = True
                     
                 time.sleep(1)
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                
