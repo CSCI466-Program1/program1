@@ -13,7 +13,25 @@ class Client(threading.Thread):
         self.my_server = my_server
         self.opp_server = opp_server
 
-        self.shots = [0, 1, 1, 1, 2, 2, 3, 3]
+        self.shots = [
+        0, 1,
+        1, 1,
+        2, 1,
+        3, 1,
+        4, 1,
+        5, 1,
+        0, 6,
+        1, 6,
+        2, 6,
+        5, 5,
+        5, 6,
+        7, 2,
+        7, 3,
+        7, 4,
+        7, 5,
+        9, 0,
+        9, 1,
+        9, 2]
         
         self.count = 0
            
@@ -41,20 +59,23 @@ class Client(threading.Thread):
         else:
             print('C: Invalid response')
 
-        filepath = os.path.join('c:/Users/ian/Documents/Courses/CSCI 466/Program1', 'opponent_board.txt')
+        filepath = os.path.join('C:\Users\ian\Downloads\program1-ian', 'opponent_board.txt')
         opp_board_r = open(filepath, 'r')
         lines = opp_board_r.readlines()
 
-        target_row = list(lines[x])
+        target_row = list(lines[x])       
         target_row[y] = replace
         lines[x] = ''.join(target_row)
         opp_board_r.close()
 
-        filepath = os.path.join('c:/Users/ian/Documents/Courses/CSCI 466/Program1', 'opponent_board.txt')
+        filepath = os.path.join('C:\Users\ian\Downloads\program1-ian', 'opponent_board.txt')
         opp_board_w = open(filepath, 'w')
         opp_board_w.write(''.join(lines))
         opp_board_w.close()
-        
+          
+        print('Opponent Board')
+        for i in range(10):
+            print(lines[i])
     
     def shoot(self):
     
@@ -76,7 +97,7 @@ class Client(threading.Thread):
         
         while True:
             
-            time.sleep(1)
+            time.sleep(0.01)
             print('C: Trying to connect to ' + str(self.opp_server))
             try:
                 self.s.connect((self.opp_server))
@@ -90,7 +111,7 @@ class Client(threading.Thread):
         
         while True:
             
-            time.sleep(1)
+            time.sleep(0.01)
             print('C: Trying to connect to ' + str(self.my_server))
             try:
                 self.s.connect((self.my_server))
@@ -103,14 +124,14 @@ class Client(threading.Thread):
         
         while True:
             #TEMPORARY---------
-            if(self.count >= 8):
-                print('C: exit')
+            if(self.count >= 36):
+                print('C: Game Over, You Win!')
                 break
             #TEMPORARY---------
             if(self.my_turn == True):
-                print('C: 1')
+                #print('C: 1')
                 self.connect_opp_server()
-                print('C: 2')
+                #print('C: 2')
                 self.shoot()                                          
                 
                 data = self.s.recv(64)  
@@ -118,8 +139,8 @@ class Client(threading.Thread):
                 self.update_opponent(data, self.lastshot[0], self.lastshot[1])
                 self.s.close()
                 
-                time.sleep(1)
+                time.sleep(0.01)
                 
             else:
-                time.sleep(1)
+                time.sleep(0.01)
                 

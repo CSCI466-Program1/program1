@@ -16,17 +16,21 @@ class Server(threading.Thread):
     
         self.carrier = 0 #5 lives
         self.battleship = 0 #4 lives
-        self.crusier = 0 #3 lives
+        self.cruiser = 0 #3 lives
         self.submarine = 0 #3 lives
         self.destroyer = 0 #2 lives       
         
 
     def check_for_hit(self, coordinates):        
-        filepath = os.path.join('c:/Users/ian/Documents/Courses/CSCI 466/Program1', 'own_board.txt')        
+        filepath = os.path.join('C:\Users\ian\Downloads\program1-ian', 'own_board.txt')        
         own_board = open(filepath, 'r')        
         
         lines = own_board.readlines()        
         own_board.close()
+        
+        print('Own Board')
+        for i in range(10):
+            print(lines[i])
         
         x = coordinates[0]
         y = coordinates[1]
@@ -120,8 +124,7 @@ class Server(threading.Thread):
 
     def parse_shot(self, shot):
         coordinates = re.findall(r'\d+', shot)
-        coordinates = map(int, coordinates)
-        print('S: ' + str(coordinates))
+        coordinates = map(int, coordinates)        
         return coordinates
 
     
@@ -132,6 +135,7 @@ class Server(threading.Thread):
                           
             self.s.listen(1)
             self.conn, self.address = self.s.accept()
+            print('S: Connected to ' + str(self.address))
 
             shot = self.conn.recv(64)
             print("S: Received data of " + shot.decode('utf-8'))
